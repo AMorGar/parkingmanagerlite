@@ -41,6 +41,10 @@ public class CucumberSteps extends CucumberConfiguration {
     @Given("un usuario esta en la pagina inicial")
     public void openHome() {
         driver.get("http://localhost:" + port + "/");
+        assertTrue( driver.findElement(By.id("to-users-link")).isDisplayed());
+        assertTrue( driver.findElement(By.id("to-draws-link")).isDisplayed());
+        assertTrue( driver.findElement(By.id("home-tittle")).isDisplayed());
+        assertTrue( driver.findElement(By.id("navbarBasicExample")).isDisplayed());
     }
 
     @When("el usuario hace click sobre el botón de Usuarios")
@@ -59,6 +63,10 @@ public class CucumberSteps extends CucumberConfiguration {
     public void openUserCreateForm()
     {
         driver.get("http://localhost:" + port + "/createUser");
+        assertTrue( driver.findElement(By.id("to-users-link")).isDisplayed());
+        assertTrue( driver.findElement(By.id("to-draws-link")).isDisplayed());
+        assertTrue( driver.findElement(By.id("home-tittle")).isDisplayed());
+        assertTrue( driver.findElement(By.id("navbarBasicExample")).isDisplayed());
     }
 
     @When("el usuario hace click sobre el botón de Usuarios")
@@ -78,6 +86,10 @@ public class CucumberSteps extends CucumberConfiguration {
     @Given("un usuario esta en la pagina inicial")
     public void openDraw() {
         driver.get("http://localhost:" + port + "/");
+        assertTrue( driver.findElement(By.id("to-users-link")).isDisplayed());
+        assertTrue( driver.findElement(By.id("to-draws-link")).isDisplayed());
+        assertTrue( driver.findElement(By.id("home-tittle")).isDisplayed());
+        assertTrue( driver.findElement(By.id("navbarBasicExample")).isDisplayed());
     }
 
     @When("el usuario hace click sobre el botón de Lista De Sorteos")
@@ -90,6 +102,11 @@ public class CucumberSteps extends CucumberConfiguration {
     public void navigateToDraw(){
         String currentUrl = driver.getCurrentUrl();
         assertTrue(currentUrl.contains("/draws"));
+        assertTrue( driver.findElement(By.id("to-draws-link")).isDisplayed());
+        assertTrue( driver.findElement(By.id("to-users-link")).isDisplayed());
+        assertTrue( driver.findElement(By.id("to-draws-link")).isDisplayed());
+        assertTrue( driver.findElement(By.id("to-home-link")).isDisplayed());
+        assertTrue( driver.findElement(By.id("navbarBasicExample")).isDisplayed());
     }
 
 // Desde lista de sorteos a crear sorteos
@@ -128,4 +145,6 @@ public class CucumberSteps extends CucumberConfiguration {
         String currentUrl = driver.getCurrentUrl();
         assertTrue(currentUrl.contains("/newUser"));
     }
+
+
 }
