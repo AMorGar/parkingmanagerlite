@@ -81,24 +81,21 @@ public class CucumberSteps extends CucumberConfiguration {
     
     }
 
+
+
     @Dado("un usuario esta en la pagina {}")
     public void openPage(String pageName) {
         driver.get(getUrlFromPageName(pageName));
-
     }
-
     @Dado("el correo {} no esta asignado a otro usuario")
     public void mockUserNotExists(String email){
-        when(mockedUserRepository.findByEmail(email)).thenReturn(null);
-        //when(mockedUserService.userExists(email)).thenReturn(false);
-        
+        when(mockedUserRepository.findByEmail(email)).thenReturn(null);    
     }
     @Cuando("relleno el campo {} con {}")
     public void populateField(String fieldName,String fieldValue){
         WebElement inputField = driver.findElement(By.id(getFieldIdFromName(fieldName)));
         inputField.sendKeys(fieldValue);
     }
-
     @Cuando("el usuario hace click sobre el botón de {}")
     public void clickButton(String buttonName) {
         String buttonId = "";
@@ -112,23 +109,21 @@ public class CucumberSteps extends CucumberConfiguration {
             case "crear usuario":
                 buttonId = "user-create-button-submit";
                 break;
+            case "crear sorteo":
+                buttonId = "button-create-draw";
             default:
                 break;
         }
         driver.findElement(By.id(buttonId)).click();
     }
-
     @Entonces("esta en la pagina de {}")
     public void isInPage(String pageName) {
-
         assertTrue(driver.getCurrentUrl().equals(getUrlFromPageName(pageName)));
     }
-
     @Entonces("se ha persistido el usuario en la base de datos")
     public void checkUserWasSaved(){
         verify(mockedUserRepository,times(1)).save(any(User.class));
     }
-
     @Entonces("se muestra un campo de {}")
     public void fieldIsDisplayed(String fieldName){
         String fieldId = getFieldIdFromName(fieldName);
@@ -136,7 +131,6 @@ public class CucumberSteps extends CucumberConfiguration {
         
         assertTrue(field.isDisplayed());
     }
-
     private String getUrlFromPageName(String pageName) {
         String endPoint = "";
         switch (pageName) {
@@ -151,13 +145,18 @@ public class CucumberSteps extends CucumberConfiguration {
                 break;
             case "creación de usuarios":
                 endPoint = "/newUser";
-            break;
+                break;
+            case "creacion de sorteos":
+                endPoint = "/newDraw";
+                break;
             default:
                 break;
         }
         return getUrlFromEndPoint(endPoint);
     }
 
+
+    
     private String getFieldIdFromName(String fieldName) {
         String fieldId ="";
         switch (fieldName) {
