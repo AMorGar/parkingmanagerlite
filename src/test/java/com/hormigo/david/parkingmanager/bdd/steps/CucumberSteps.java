@@ -128,4 +128,10 @@ public class CucumberSteps extends CucumberConfiguration {
         String currentUrl = driver.getCurrentUrl();
         assertTrue(currentUrl.contains("/newUser"));
     }
+
+//---------------------------------------------------------------------------------------------------------
+
+
+
+
 }
