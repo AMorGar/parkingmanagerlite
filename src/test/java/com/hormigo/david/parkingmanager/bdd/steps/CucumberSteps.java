@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -18,6 +19,7 @@ import java.util.Optional;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.mockito.verification.VerificationMode;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -50,9 +52,15 @@ public class CucumberSteps extends CucumberConfiguration {
 
     }
     @MockBean
-    private UserRepository mockedRepository;
+    private UserRepository mockedUserRepository;
+    @Spy
     @InjectMocks
     private UserServiceImpl mockedUserService;
+    @MockBean
+    private UserRepository mockedDrawRepository;
+    @Spy
+    @InjectMocks
+    private UserServiceImpl mockedDrawService;
 
     @Value("${local.server.port}")
     private int port;
@@ -63,6 +71,8 @@ public class CucumberSteps extends CucumberConfiguration {
         options.addArguments("--remote-allow-origins=*");
         driver = new ChromeDriver(options);
         MockitoAnnotations.openMocks(this);
+        clearInvocations(mockedUserRepository);
+        clearInvocations(mockedUserService);
     }
 
     @After
@@ -79,7 +89,7 @@ public class CucumberSteps extends CucumberConfiguration {
 
     @Dado("el correo {} no esta asignado a otro usuario")
     public void mockUserNotExists(String email){
-        when(mockedRepository.findByEmail(email)).thenReturn(null);
+        when(mockedUserRepository.findByEmail(email)).thenReturn(null);
         //when(mockedUserService.userExists(email)).thenReturn(false);
         
     }
@@ -116,7 +126,7 @@ public class CucumberSteps extends CucumberConfiguration {
 
     @Entonces("se ha persistido el usuario en la base de datos")
     public void checkUserWasSaved(){
-        verify(mockedRepository,times(1)).save(any(User.class));
+        verify(mockedUserRepository,times(1)).save(any(User.class));
     }
 
     @Entonces("se muestra un campo de {}")
