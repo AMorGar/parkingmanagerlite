@@ -47,20 +47,20 @@ Característica: Gestion de usuarios
     Y no se ha persistido el usuario en la base de datos
 
   Escenario: Crear un usuario erroneamente(usuario vacio)
-      Dado un usuario esta en la pagina de creacion de usuarios
-      Y el correo usuario@g.educaand.com no esta asignado a otro usuario
-      Cuando relleno el campo correo usuario@g.educaand.com
-      Y relleno el campo primer apellido con Alejandro
-      Y el usuario hace click sobre el boton de guardar usuario
-      Entonces estamos en la pagina formulario de creacion de Usuarios
-      Y no se ha persistido el usuario en la base de datos
+    Dado un usuario esta en la pagina de creacion de usuarios
+    Y el correo usuario@g.educaand.com no esta asignado a otro usuario
+    Cuando relleno el campo correo usuario@g.educaand.com
+    Y relleno el campo primer apellido con Alejandro
+    Y el usuario hace click sobre el boton de guardar usuario
+    Entonces estamos en la pagina formulario de creacion de Usuarios
+    Y no se ha persistido el usuario en la base de datos
 
   Escenario: Crear un usuario erroneamente(primer apellido vacio)
-      Dado un usuario esta en la pagina de creacion de usuarios
-      Y el correo usuario@g.educaand.com no esta asignado a otro usuario
-      Cuando relleno el campo nombre con Alejandro
-      Y relleno el campo correo con usuario@g.educaand.com
-      Y no relleno el campo primer apellido
-      Y el usuario hace click sobre el boton de guardar usuario
-      Entonces estamos en la pagina formulario de creacion de Usuarios
-      Y no se ha persistido el usuario en la base de datos
+    Dado un usuario esta en la pagina de creacion de usuarios
+    Y el correo usuario@g.educaand.com no esta asignado a otro usuario
+    Cuando relleno el campo nombre con Alejandro
+    Y relleno el campo correo con usuario@g.educaand.com
+    Y no relleno el campo primer apellido
+    Y el usuario hace click sobre el boton de guardar usuario
+    Entonces estamos en la pagina formulario de creacion de Usuarios
+    Y no se ha persistido el usuario en la base de datos

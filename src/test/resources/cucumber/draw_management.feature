@@ -22,3 +22,8 @@ Característica: Gestion de sorteos
     Dado un usuario esta en la lista de sorteos
     Entonces el titulo es de lista de sorteos
     Y se muestra el boton de crear sorteos
+
+  Escenario: Mostrar formulario para crear sorteo
+    Dado un usuario esta en la pagina lista de sorteos
+    Cuando un usuario hace click sobre el boton de crear sorteos
+    Entonces estamos en la pagina creacion de sorteos
