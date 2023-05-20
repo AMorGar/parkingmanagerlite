@@ -84,8 +84,6 @@ public class CucumberSteps extends CucumberConfiguration {
     
     }
 
-
-
     @Dado("un usuario esta en la pagina {}")
     public void openPage(String pageName) {
         driver.get(getUrlFromPageName(pageName));
@@ -233,8 +231,4 @@ public class CucumberSteps extends CucumberConfiguration {
 
     }
 
-
-
-
-//------------------------------------------------------------------------------------------------------------------------------------------
 }
