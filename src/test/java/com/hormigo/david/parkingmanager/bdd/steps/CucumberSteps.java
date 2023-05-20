@@ -143,7 +143,7 @@ public class CucumberSteps extends CucumberConfiguration {
             case "lista de sorteos":
                 endPoint = "/draws";
                 break;
-            case "creación de usuarios":
+            case "creacion de usuarios":
                 endPoint = "/newUser";
                 break;
             case "creacion de sorteos":
@@ -154,26 +154,51 @@ public class CucumberSteps extends CucumberConfiguration {
         }
         return getUrlFromEndPoint(endPoint);
     }
-
-
-    
     private String getFieldIdFromName(String fieldName) {
         String fieldId ="";
-        switch (fieldName) {
-            case "correo electrónico":
-                fieldId = "user-create-field-email";
-                break;
-            case "nombre":
-            fieldId = "user-create-field-name";
-            break;
-            case "primer apellido":
-            fieldId = "user-create-field-lastname1";
-            break;
-            case "segundo apellido":
-            fieldId = "user-create-field-lastname2";
-            break;
-            default:
-                break;
+        switch (fieldId) {
+            case "el boton inicio":
+            fieldId= "to-home-link";
+
+            case "el boton usuarios":
+            fieldId= "to-users-link";
+
+            case "el boton sorteos":
+            fieldId= "to-draws-link";
+
+            case "el boton de crear usuarios":
+            fieldId= "users-button-create";
+
+            case "el boton de crear sorteos":
+            fieldId= "draws-button-create";
+
+            case "el boton de enviar formulario de usuarios":
+            fieldId= "user-create-button-submit";
+
+            case "el boton de enviar formulario de sorteos":
+            fieldId= "draw-create-button-submit";
+
+            case "la tabla draws":
+            fieldId= "draw-list-table";
+
+            case "la tabla users":
+            fieldId= "user-list-table";
+
+            case "el campo correo":
+            fieldId= "user-create-field-email";
+
+            case "el campo nombre":
+            fieldId= "user-create-field-name";
+
+            case "el campo primer apellido":
+            fieldId= "user-create-field-lastname1";
+
+            case "el campo segundo apellido":
+            fieldId= "user-create-field-lastname2";
+            
+            case "el campo descripcion":
+            fieldId= "draw-field-description";
+
         }
         return fieldId;
     }
@@ -181,4 +206,8 @@ public class CucumberSteps extends CucumberConfiguration {
         return "http://localhost:" + port + endpoint;
     }
 
+
+
+
+//------------------------------------------------------------------------------------------------------------------------------------------
 }
