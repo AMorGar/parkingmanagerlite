@@ -27,7 +27,9 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
+import com.hormigo.david.parkingmanager.draw.domain.Draw;
+import com.hormigo.david.parkingmanager.draw.domain.DrawRepository;
+import com.hormigo.david.parkingmanager.draw.service.DrawServiceImpl;
 import com.hormigo.david.parkingmanager.bdd.CucumberConfiguration;
 import com.hormigo.david.parkingmanager.user.domain.User;
 import com.hormigo.david.parkingmanager.user.domain.UserRepository;
@@ -61,7 +63,6 @@ public class CucumberSteps extends CucumberConfiguration {
     @Spy
     @InjectMocks
     private UserServiceImpl mockedDrawService;
-
     @Value("${local.server.port}")
     private int port;
 
@@ -73,6 +74,8 @@ public class CucumberSteps extends CucumberConfiguration {
         MockitoAnnotations.openMocks(this);
         clearInvocations(mockedUserRepository);
         clearInvocations(mockedUserService);
+        clearInvocations(mockedDrawRepository);
+        clearInvocations(mockedDrawService);
     }
 
     @After
@@ -86,50 +89,6 @@ public class CucumberSteps extends CucumberConfiguration {
     @Dado("un usuario esta en la pagina {}")
     public void openPage(String pageName) {
         driver.get(getUrlFromPageName(pageName));
-    }
-    @Dado("el correo {} no esta asignado a otro usuario")
-    public void mockUserNotExists(String email){
-        when(mockedUserRepository.findByEmail(email)).thenReturn(null);    
-    }
-    @Cuando("relleno el campo {} con {}")
-    public void populateField(String fieldName,String fieldValue){
-        WebElement inputField = driver.findElement(By.id(getFieldIdFromName(fieldName)));
-        inputField.sendKeys(fieldValue);
-    }
-    @Cuando("el usuario hace click sobre el botón de {}")
-    public void clickButton(String buttonName) {
-        String buttonId = "";
-        switch (buttonName) {
-            case "Usuarios":
-                buttonId = "to-users-link";
-                break;
-            case "Sorteos":
-                buttonId = "to-draws-link";
-                break;
-            case "crear usuario":
-                buttonId = "user-create-button-submit";
-                break;
-            case "crear sorteo":
-                buttonId = "button-create-draw";
-            default:
-                break;
-        }
-        driver.findElement(By.id(buttonId)).click();
-    }
-    @Entonces("esta en la pagina de {}")
-    public void isInPage(String pageName) {
-        assertTrue(driver.getCurrentUrl().equals(getUrlFromPageName(pageName)));
-    }
-    @Entonces("se ha persistido el usuario en la base de datos")
-    public void checkUserWasSaved(){
-        verify(mockedUserRepository,times(1)).save(any(User.class));
-    }
-    @Entonces("se muestra un campo de {}")
-    public void fieldIsDisplayed(String fieldName){
-        String fieldId = getFieldIdFromName(fieldName);
-        WebElement field = driver.findElement(By.id(fieldId));
-        
-        assertTrue(field.isDisplayed());
     }
     private String getUrlFromPageName(String pageName) {
         String endPoint = "";
@@ -154,6 +113,67 @@ public class CucumberSteps extends CucumberConfiguration {
         }
         return getUrlFromEndPoint(endPoint);
     }
+    private String getUrlFromEndPoint(String endpoint) {
+        return "http://localhost:" + port + endpoint;
+    }
+
+    @Dado("el correo {} no esta asignado a otro usuario")
+    public void mockUserNotExists(String email){
+        when(mockedUserRepository.findByEmail(email)).thenReturn(null);    
+    }
+    @Cuando("relleno el campo {} con {}")
+    public void populateField(String fieldName,String fieldValue){
+        WebElement inputField = driver.findElement(By.id(getFieldIdFromName(fieldName)));
+        inputField.sendKeys(fieldValue);
+    }
+    @Cuando("el usuario hace click sobre el botón de {}")
+    public void clickButton(String buttonName) {
+        String buttonId = "";
+        switch (buttonName) {
+            case "usuarios":
+                buttonId = "to-users-link";
+                break;
+            case "sorteos":
+                buttonId = "to-draws-link";
+                break;
+            case "guardar usuario":
+                buttonId = "user-create-button-submit";
+                break;
+            case "crear usuario":
+                buttonId = "users-button-create";
+                break;
+            case "crear sorteos":
+                buttonId = "draws-button-create";
+                break;
+            case "guardar sorteo":
+                buttonId = "draw-create-button-submit";
+                break;
+            default:
+                break;
+        }
+        driver.findElement(By.id(buttonId)).click();
+    }
+    @Entonces("esta en la pagina de {}")
+    public void isInPage(String pageName) {
+        assertTrue(driver.getCurrentUrl().equals(getUrlFromPageName(pageName)));
+    }
+    @Entonces("se ha persistido el usuario en la base de datos")
+    public void checkUserWasSaved(){
+        verify(mockedUserRepository,times(1)).save(any(User.class));
+    }
+
+    @Entonces("se ha persistido el sorteo en la base de datos")
+    public void checkDrawWasSaved() {
+        verify(mockedDrawRepository,times(1)).save(any(Draw.class));
+    }
+    @Entonces("se muestra el campo de {}")
+    public void fieldIsDisplayed(String fieldName){
+        String fieldId = getFieldIdFromName(fieldName);
+        WebElement field = driver.findElement(By.id(fieldId));
+        
+        assertTrue(field.isDisplayed());
+    }
+
     private String getFieldIdFromName(String fieldName) {
         String fieldId ="";
         switch (fieldId) {
@@ -172,17 +192,11 @@ public class CucumberSteps extends CucumberConfiguration {
             case "el boton de crear sorteos":
             fieldId= "draws-button-create";
 
-            case "el boton de enviar formulario de usuarios":
+            case "el boton de guardar usuario":
             fieldId= "user-create-button-submit";
 
-            case "el boton de enviar formulario de sorteos":
+            case "el boton de guardar sorteo":
             fieldId= "draw-create-button-submit";
-
-            case "la tabla draws":
-            fieldId= "draw-list-table";
-
-            case "la tabla users":
-            fieldId= "user-list-table";
 
             case "el campo correo":
             fieldId= "user-create-field-email";
@@ -193,17 +207,30 @@ public class CucumberSteps extends CucumberConfiguration {
             case "el campo primer apellido":
             fieldId= "user-create-field-lastname1";
 
-            case "el campo segundo apellido":
-            fieldId= "user-create-field-lastname2";
-            
             case "el campo descripcion":
             fieldId= "draw-field-description";
 
         }
         return fieldId;
     }
-    private String getUrlFromEndPoint(String endpoint) {
-        return "http://localhost:" + port + endpoint;
+    @Entonces("el titulo es de {}")
+    public void titleIsShowing(String titleHtml) {
+        String title = "";
+        String titleId = "";
+        switch (titleHtml) {
+            case "lista de sorteos":
+                title = "Sorteos";
+                titleId = "title-draws";
+                break;
+            case "creacion de sorteos":
+                title = "Crear nuevo sorteo";
+                titleId = "title-create-draws";
+                break;
+        }
+
+        WebElement titulo = driver.findElement(By.id(titleId));
+        assertEquals(title, titulo.getText());
+
     }
 
 
