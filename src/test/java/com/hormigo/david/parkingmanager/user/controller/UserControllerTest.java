@@ -144,18 +144,22 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testUserPatch() throws Exception{
+    public void testUserPatch() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        HashMap<String, Object> mapita= new HashMap<>();
-        User user = new User("aprobamos@ahora.com","Alejandro","Moreno","Garrido",Role.PROFESSOR);
+        HashMap<String, Object> mapita = new HashMap<>();
+        mapita.put("name", "Alejandro");
+        mapita.put("lastname1", "Moreno");       
+        User user = new User("aprobamos@ahora.com", "Alejandro", "Moreno", "Garrido", Role.PROFESSOR);
         String guason = mapper.writeValueAsString(user);
-        String json = mapper.writeValueAsString(mapita);
-        when(userService.updateUser(1, mapita)).thenReturn(user);
+        String json = mapper.writeValueAsString(mapita);        
+        when(userService.updateUser(1, mapita)).thenReturn(user);       
         this.mockMvc.perform(patch("/api/users/1")
-                    .contentType("application/json").content(json))
-                    .andDo(print())
-                    .andExpect(status().isOk())
-                    .andExpect(content().json(guason));
+                .contentType("application/json")
+                .content(json))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json(guason));
     }
+    
 
 }
